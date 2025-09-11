@@ -4,12 +4,12 @@ function insertTodo(todo) {
   const todoList = document.getElementById("todo_list");
 
   const li = document.createElement("li");
-  li.classList.add("flex", "gap-2", "group", "rounded-xl", "border-b", "py-2");
+  li.classList.add("flex", "gap-2", "group", "rounded-xl", "border-b", "py-4", "px-2");
   li.id = todo.id;
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-  checkbox.checked=todo.isCompleted;
+  checkbox.checked = todo.isCompleted;
   checkbox.classList.add(
     "w-6",
     "bg-green-500",
@@ -26,8 +26,7 @@ function insertTodo(todo) {
     "w-full",
     "shadow-lg",
     "rounded",
-    "px-2",
-    "py-1",
+    "p-0",
     "text-xl",
     "line-clamp-1",
     "font-serif",
@@ -86,15 +85,18 @@ function insertTodo(todo) {
   li.appendChild(input);
   li.appendChild(actions);
 
+
+  
+
   todoList.prepend(li);
 
   checkbox.addEventListener("change", (e) => {
     const checked = e.target.checked;
-    
+
     if (checked) {
       li.querySelector(".input").classList.add("line-through");
       li.querySelector(".input").classList.add("text-gray-400");
-      li.classList.add("border-green-500")
+      li.classList.add("border-green-500");
 
       todoes = todoes.filter((t) => {
         if (t.id == li.id) {
@@ -117,11 +119,22 @@ function insertTodo(todo) {
       localStorage.setItem("todoes", JSON.stringify(todoes));
       li.querySelector(".input").classList.remove("line-through");
       li.querySelector(".input").classList.remove("text-gray-400");
-      li.classList.remove("border-green-500")
+      li.classList.remove("border-green-500");
+    }
+  });
+
+  input.addEventListener("keypress", function (event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      saveTodo();
     }
   });
 
   saveBtn.addEventListener("click", () => {
+    saveTodo();
+  });
+
+  function saveTodo() {
     input.disabled = true;
     saveBtn.classList.add("hidden");
     editBtn.classList.remove("hidden");
@@ -138,7 +151,7 @@ function insertTodo(todo) {
       }
     });
     localStorage.setItem("todoes", JSON.stringify(todoes));
-  });
+  }
 
   editBtn.addEventListener("click", () => {
     input.disabled = false;
@@ -157,16 +170,14 @@ function insertTodo(todo) {
   });
 
   if (todo.isCompleted) {
-      li.querySelector(".input").classList.add("line-through");
-      li.querySelector(".input").classList.add("text-gray-400");
-      li.classList.add("border-green-500")
-
-    } else {
-      
-      li.querySelector(".input").classList.remove("line-through");
-      li.querySelector(".input").classList.remove("text-gray-400");
-      li.classList.remove("border-green-500")
-    }
+    li.querySelector(".input").classList.add("line-through");
+    li.querySelector(".input").classList.add("text-gray-400");
+    li.classList.add("border-green-500");
+  } else {
+    li.querySelector(".input").classList.remove("line-through");
+    li.querySelector(".input").classList.remove("text-gray-400");
+    li.classList.remove("border-green-500");
+  }
 }
 function removeError() {
   document.getElementById("error").innerHTML = "";
@@ -181,8 +192,16 @@ function loadTodoes() {
   });
 }
 
+const input = document.getElementById("input");
+
+input.addEventListener("keypress", function (event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    addTodo();
+  }
+});
 function addTodo() {
-  const title = document.getElementById("input").value.trim();
+  const title = input.value.trim();
   if (title.length < 3) {
     const error = document.getElementById("error");
     error.innerHTML = "Title should be greater than 2 character";
