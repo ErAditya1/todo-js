@@ -53,7 +53,7 @@ function insertTodo(todo) {
   input.type = "text";
   input.value = todo.title;
   input.disabled = true;
-  input.className = "w-full bg-transparent border-none text-white text-lg truncate font-medium input";
+  input.className = "w-full bg-transparent border-none text-white text-lg  font-medium input";
 
   // meta / time
   const meta = document.createElement("div");
